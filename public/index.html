@@ -1,0 +1,86 @@
+<!--
+  SafeSquid downloads — application shell.
+
+  Everything below is static. The listing is rendered client-side from
+  /manifest.json by the Web Components in /js/components/, because Apache is
+  configured never to list a directory (see httpd.conf).
+
+  No inline <script> and no inline <style> anywhere on this page. The
+  Content-Security-Policy sets script-src 'self' and style-src 'self' with no
+  'unsafe-inline', so either would simply be blocked. Everything is linked.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="SafeSquid downloads — appliance images, packages and tools.">
+<title>SafeSquid downloads</title>
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>&#128230;</text></svg>">
+
+<!-- type=module gives us imports with no bundler, and is deferred and strict
+     by default. -->
+<script type="module" src="/js/app.js"></script>
+
+<a class="skip-link" href="#listing">Skip to file listing</a>
+
+<div class="page">
+  <header class="masthead">
+    <div class="masthead-title">
+      <h1><a href="/" data-route="">SafeSquid <span class="masthead-accent">downloads</span></a></h1>
+      <p class="masthead-sub">Appliance images, packages and tools.</p>
+    </div>
+
+    <div class="search">
+      <label class="search-label" for="search-input">Search all files</label>
+      <input
+        id="search-input"
+        class="search-input"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Search every folder…">
+      <p class="search-hint" id="search-hint">Searches the whole tree, not just this folder.</p>
+    </div>
+  </header>
+
+  <breadcrumb-nav id="breadcrumb"></breadcrumb-nav>
+
+  <main id="listing" class="main">
+    <!-- Replaced by the not-found / error states when those apply. -->
+    <directory-listing id="directory"></directory-listing>
+
+    <section id="page-state" class="page-state" hidden>
+      <h2 class="page-state-title"></h2>
+      <p class="page-state-body"></p>
+      <button type="button" class="button" id="page-state-action" hidden></button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer-freshness">
+      <!--
+        The manifest is a cache of the filesystem. It is stale from the moment
+        anything in storage/ changes until generate-manifest.sh runs again.
+        mod_autoindex, the thing this replaces, reads the filesystem per
+        request and so can never be stale — that is the one real advantage
+        given up here. Showing the index age is what keeps the trade visible
+        instead of silent. Regenerate with `make manifest`.
+      -->
+      Index generated <time id="generated-at">…</time>.
+    </p>
+    <p class="footer-note">
+      Served by Apache with directory listing disabled. The index above is
+      built by <code>scripts/generate-manifest.sh</code>.
+    </p>
+  </footer>
+</div>
+
+<noscript>
+  <p class="noscript">
+    This index is rendered client-side, so it needs JavaScript. The files
+    themselves do not: every artifact is a plain URL under <code>/files/</code>
+    and can be fetched with curl or wget. The machine-readable index is at
+    <a href="/manifest.json">/manifest.json</a>.
+  </p>
+</noscript>
