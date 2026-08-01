@@ -266,11 +266,6 @@
     font-size: 0.75rem;
   }
 
-  .cell--size::after {
-    content: " ·";
-    color: var(--fg-faint);
-  }
-
   .row--head {
     display: flex;
     gap: 0.75rem;

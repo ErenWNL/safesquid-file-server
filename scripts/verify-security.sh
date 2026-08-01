@@ -146,6 +146,17 @@ for EXT_PATH in "contrib/install-helper-1720000000.sh" "contrib/build-1720000000
 done
 
 
+# The History API fallback must rewrite ONLY /browse/... Written the usual SPA
+# way (rewrite anything that is not an existing file) it also swallowed a
+# MISSING /manifest.json, answering HTML with a 200 so the client reported the
+# index as unparseable instead of ungenerated. Unknown paths must 404.
+assert_status "an app route serves the shell"           "$BASE/browse/SWG" 200
+assert_status "a deep app route serves the shell"       "$BASE/browse/repo/dists/stable" 200
+assert_status "an unknown path 404s, not the shell"     "$BASE/nonsense-xyz" 404
+assert_status "a missing asset 404s, not the shell"     "$BASE/css/missing-xyz.css" 404
+assert_body_lacks "an unknown path is not the app shell" \
+  "$BASE/nonsense-xyz" "<directory-listing"
+
 # ============================================================================
 section "3. Path traversal"
 # ============================================================================

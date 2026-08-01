@@ -182,7 +182,13 @@ function render() {
   let entries;
   if (searching) {
     entries = filterEntries(flatten(root).filter((e) => e.type === 'file'), state.query);
-    el.breadcrumb.trail = [{ name: 'downloads', path: '' }];
+    // The trail must say "search", not just "downloads". Results come from all
+    // over the tree, so a bare "downloads" crumb implies you are looking at the
+    // root folder's contents when you are not.
+    el.breadcrumb.trail = [
+      { name: 'downloads', path: '' },
+      { name: `search: ${state.query.trim()}`, path: '' },
+    ];
   } else {
     const node = resolvePath(root, state.path);
     if (!node || node.type !== 'dir') {

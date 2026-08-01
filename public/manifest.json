@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-01T08:19:54Z",
-  "generatedAtEpoch": 1785572394,
+  "generatedAt": "2026-08-01T09:28:57Z",
+  "generatedAtEpoch": 1785576537,
   "root": {
     "entries": [
       {
@@ -49,7 +49,7 @@
           }
         ],
         "fileCount": 6,
-        "mtime": 1785571998,
+        "mtime": 1718548800,
         "name": "aggregator",
         "path": "aggregator",
         "totalSize": 5262230,
@@ -94,7 +94,7 @@
           }
         ],
         "fileCount": 5,
-        "mtime": 1785571998,
+        "mtime": 1700000000,
         "name": "appliance",
         "path": "appliance",
         "totalSize": 5410257,
@@ -125,7 +125,7 @@
           }
         ],
         "fileCount": 3,
-        "mtime": 1785571981,
+        "mtime": 1720000000,
         "name": "contrib",
         "path": "contrib",
         "totalSize": 1156000,
@@ -156,7 +156,7 @@
           }
         ],
         "fileCount": 3,
-        "mtime": 1785571998,
+        "mtime": 1480000000,
         "name": "legacy",
         "path": "legacy",
         "totalSize": 466166,
@@ -184,7 +184,7 @@
                   }
                 ],
                 "fileCount": 2,
-                "mtime": 1785571981,
+                "mtime": 1735689600,
                 "name": "stable",
                 "path": "repo/dists/stable",
                 "totalSize": 31146,
@@ -192,7 +192,7 @@
               }
             ],
             "fileCount": 2,
-            "mtime": 1785571981,
+            "mtime": 1735689600,
             "name": "dists",
             "path": "repo/dists",
             "totalSize": 31146,
@@ -216,7 +216,7 @@
               }
             ],
             "fileCount": 2,
-            "mtime": 1785571981,
+            "mtime": 1745000000,
             "name": "pool",
             "path": "repo/pool",
             "totalSize": 1118000,
@@ -231,7 +231,7 @@
           }
         ],
         "fileCount": 5,
-        "mtime": 1785571981,
+        "mtime": 1745000000,
         "name": "repo",
         "path": "repo",
         "totalSize": 1152246,
@@ -242,7 +242,7 @@
           {
             "entries": [],
             "fileCount": 0,
-            "mtime": 1785571981,
+            "mtime": 1736726400,
             "name": "pending",
             "path": "staging/pending",
             "totalSize": 0,
@@ -257,7 +257,7 @@
           }
         ],
         "fileCount": 1,
-        "mtime": 1785571981,
+        "mtime": 1736726400,
         "name": "staging",
         "path": "staging",
         "totalSize": 905000,
@@ -295,7 +295,7 @@
           }
         ],
         "fileCount": 4,
-        "mtime": 1785571981,
+        "mtime": 1740000000,
         "name": "SWG",
         "path": "SWG",
         "totalSize": 7460000,
@@ -333,7 +333,7 @@
           }
         ],
         "fileCount": 4,
-        "mtime": 1785571981,
+        "mtime": 1715000000,
         "name": "VPN",
         "path": "VPN",
         "totalSize": 1314000,

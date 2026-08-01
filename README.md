@@ -27,7 +27,7 @@ and deploys exactly as it sits in the repo.
 │ REQUEST TIME                                                             │
 │                                                                          │
 │   GET /            ──▶ index.html ─▶ js/app.js                           │
-│   GET /browse/SWG  ──▶ (rewritten to index.html; client router takes it)  │
+│   GET /browse/SWG  ──▶ (only /browse/* rewrites to index.html)           │
 │                              │                                           │
 │                              │ owns ALL view state                       │
 │                              │ route · sort · filter · cap               │
@@ -69,7 +69,7 @@ is deliberate — see [Known limitations](#known-limitations).
 |---|---|
 | `make serve` | Regenerate the manifest, then run Apache |
 | `make manifest` | Rebuild `public/manifest.json` from `storage/` |
-| `make verify` | 62 security assertions against a running server |
+| `make verify` | 69 security assertions against a running server |
 | `make test` | 28 adversarial tests for the manifest generator |
 | `make check` | Manifest + generator tests + security assertions, no browser |
 | `make stop` | Stop a server started by `make serve` |
@@ -285,9 +285,16 @@ fallback would match missing artifacts and return `index.html` with HTTP 200 —
 so `curl -O` would silently write a web page to disk under the requested `.iso`
 name.
 
-Two further bugs were found only by running the server, both of which
-`httpd -t` reported as `Syntax OK`: `RewriteRule` inside a `<Directory>` block
-is refused outright when `FollowSymLinks` is off, and in server context
+Several more were found only by running the server, and two of those were
+reported as `Syntax OK` by `httpd -t`: `RewriteRule` inside a `<Directory>`
+block is refused outright when `FollowSymLinks` is off, and in server context
 `REQUEST_FILENAME` is not yet a filesystem path, which made the fallback rewrite
-*every* request to `index.html`. Both are documented at the point of the fix in
-`httpd.conf`.
+*every* request to `index.html`.
+
+QA then found that even the corrected fallback was too broad. The standard SPA
+recipe — rewrite anything that is not an existing file — also swallowed a
+*missing* `manifest.json`, answering HTML with a 200 so the page reported the
+index as unparseable rather than ungenerated. The fallback now names its route
+prefix explicitly: only `/browse/...` rewrites, and every other unknown path
+gets a real 404. All of it is documented at the point of the fix in
+`httpd.conf` and guarded by assertions in `verify-security.sh`.

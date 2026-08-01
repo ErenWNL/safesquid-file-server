@@ -238,7 +238,17 @@ export class DirectoryListing extends HTMLElement {
       notice.hidden = false;
     } else {
       notice.hidden = true;
-      if (!this.#searchMode && total > 0) {
+      if (this.#searchMode && total > 0) {
+        // Search results need their own count. Without it the listing gives no
+        // sense of how much matched, and the folder summary below is wrong
+        // here because these rows come from all over the tree.
+        notice.replaceChildren();
+        const summary = document.createElement('span');
+        summary.className = 'summary';
+        summary.textContent = total === 1 ? '1 match' : `${total} matches`;
+        notice.appendChild(summary);
+        notice.hidden = false;
+      } else if (!this.#searchMode && total > 0) {
         notice.replaceChildren();
         const summary = document.createElement('span');
         summary.className = 'summary';
