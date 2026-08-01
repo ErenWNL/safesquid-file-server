@@ -50,6 +50,22 @@ checkpoint).
 ## /plan-eng-review
 Timestamp: 2026-08-01 13:38:59 (phase end, per TIMELOG.md)
 
+```
+  Session
+
+  Total cost:            $8.30
+  Total duration (API):  18m 15s
+  Total duration (wall): 33m 5s
+  Total code changes:    677 lines added, 8 lines removed
+  Usage by model:
+      claude-haiku-4-5:  3.1k input, 19 output, 0 cache read, 0 cache write ($0.0032)
+         claude-opus-5:  1.6k input, 73.2k output, 9.0m cache read, 198.2k cache write ($8.30)
+```
+
+Delta for this phase: **$2.38** ($8.30 cumulative − $5.92 at the previous
+checkpoint). Planning total across all three phases: $8.30, zero lines of
+application code written.
+
 ## Implementation
 Timestamp:
 
