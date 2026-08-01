@@ -1,0 +1,7 @@
+Origin: SafeSquid
+Label: SafeSquid
+Suite: stable
+Codename: stable
+Architectures: amd64
+Components: main
+Description: SafeSquid package repository

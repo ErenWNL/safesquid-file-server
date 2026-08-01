@@ -1,0 +1,4 @@
+These builds are end-of-life and receive no security updates.
+
+They remain published because existing deployments pin to them. Do not use
+them for new installations.
