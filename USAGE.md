@@ -90,6 +90,23 @@ Cumulative split: planning $8.30 (28%), implementation $20.90 (72%).
 ## /review + fixes
 Timestamp: 2026-08-01 14:52:21 (phase end, per TIMELOG.md)
 
+```
+  Session
+
+  Total cost:            $39.81
+  Total duration (API):  1h 0m 4s
+  Total duration (wall): 1h 47m 29s
+  Total code changes:    4993 lines added, 72 lines removed
+  Usage by model:
+      claude-haiku-4-5:  3.1k input, 19 output, 0 cache read, 0 cache write ($0.0032)
+         claude-opus-5:  3.4k input, 255.3k output, 58.0m cache read, 443.1k cache write ($39.81)
+```
+
+Delta for this phase: **$10.61** ($39.81 cumulative - $29.20 at the previous
+checkpoint). Five defects found, four of them ones no test would have caught
+without someone looking: a NUL byte in source, an O(n*m) hot path, an
+AbortController identity race, and a deny rule blocking published artifacts.
+
 ## /qa + fixes
 Timestamp:
 
