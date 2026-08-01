@@ -127,7 +127,9 @@ checkpoint). Cheapest phase since planning, and it still found five defects
 including a third instance of the too-broad-rewrite pattern.
 
 ## Deploy + docs
-Timestamp:
+Timestamp: 2026-08-01 15:03:48 (phase end, per TIMELOG.md)
+
+Folded into implementation and QA — see TIMELOG.md. No separate cost reading taken.
 
 ## /ship
-Timestamp:
+Timestamp: 2026-08-01 15:07:33 (phase end, per TIMELOG.md)
