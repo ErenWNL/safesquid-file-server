@@ -11,7 +11,45 @@ ROOT  := $(shell pwd)
 PORT  ?= 8081
 BASE  ?= http://localhost:$(PORT)
 
+# ---------------------------------------------------------------------------
+# Which Apache, and where its modules live.
+#
+# Homebrew's httpd is preferred when present, for one specific reason on macOS:
+# TCC blocks Apple's /usr/sbin/httpd from reading ~/Documents, ~/Desktop and
+# ~/Downloads. That surfaces as "Could not open configuration file ...
+# Operation not permitted", which looks like a config error but is a permission
+# boundary. The Homebrew binary is not covered by that restriction, so the
+# project runs wherever it happens to be checked out.
+#
+# Note also that `httpd` on PATH still resolves to Apple's copy even after
+# `brew install httpd` — Homebrew says so in its caveats — which is why this
+# uses the absolute path rather than trusting PATH.
+#
+# Override any of these from the environment if your layout differs.
+# ---------------------------------------------------------------------------
+BREW_HTTPD := /opt/homebrew/opt/httpd
+
+ifneq ($(wildcard $(BREW_HTTPD)/bin/httpd),)
+  HTTPD              ?= $(BREW_HTTPD)/bin/httpd
+  APACHE_SERVER_ROOT ?= $(BREW_HTTPD)
+  APACHE_MODULE_DIR  ?= $(BREW_HTTPD)/lib/httpd/modules
+  APACHE_MIME_TYPES  ?= /opt/homebrew/etc/httpd/mime.types
+else ifneq ($(wildcard /usr/libexec/apache2/mod_mpm_event.so),)
+  HTTPD              ?= /usr/sbin/httpd
+  APACHE_SERVER_ROOT ?= /usr
+  APACHE_MODULE_DIR  ?= /usr/libexec/apache2
+  APACHE_MIME_TYPES  ?= /private/etc/apache2/mime.types
+else
+  HTTPD              ?= /usr/sbin/apache2
+  APACHE_SERVER_ROOT ?= /etc/apache2
+  APACHE_MODULE_DIR  ?= /usr/lib/apache2/modules
+  APACHE_MIME_TYPES  ?= /etc/mime.types
+endif
+
 export SAFESQUID_ROOT := $(ROOT)
+export APACHE_SERVER_ROOT
+export APACHE_MODULE_DIR
+export APACHE_MIME_TYPES
 
 .PHONY: help serve manifest verify test check stop clean
 
@@ -28,14 +66,17 @@ help:
 	@echo
 	@echo "  Override the port with:  make serve PORT=9000"
 	@echo "  Client-side assertions:  $(BASE)/tests/"
+	@echo
+	@echo "  Using Apache:  $(HTTPD)"
 
 manifest:
 	@./scripts/generate-manifest.sh
 
 serve: manifest
 	@mkdir -p logs
-	@echo "Apache starting on $(BASE)  (Ctrl-C to stop)"
-	@httpd -f "$(ROOT)/httpd.conf" -DFOREGROUND
+	@echo "Apache: $(HTTPD)"
+	@echo "Starting on $(BASE)  (Ctrl-C to stop)"
+	@"$(HTTPD)" -f "$(ROOT)/httpd.conf" -DFOREGROUND
 
 verify:
 	@./scripts/verify-security.sh "$(BASE)"
@@ -49,7 +90,7 @@ check: manifest test
 	@echo
 	@echo "Starting a server to run the security assertions…"
 	@mkdir -p logs
-	@httpd -f "$(ROOT)/httpd.conf" -DFOREGROUND & \
+	@"$(HTTPD)" -f "$(ROOT)/httpd.conf" -DFOREGROUND & \
 	 SERVER_PID=$$!; \
 	 sleep 2; \
 	 ./scripts/verify-security.sh "$(BASE)"; \

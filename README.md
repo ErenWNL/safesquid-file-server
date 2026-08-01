@@ -77,24 +77,51 @@ is deliberate — see [Known limitations](#known-limitations).
 Client-side assertions live at <http://localhost:8081/tests/> — 119 of them,
 run by opening the page.
 
-### If Apache cannot read the project directory on macOS
+### Which Apache gets used
 
-macOS TCC blocks `/usr/sbin/httpd` from reading `~/Documents`, `~/Desktop` and
-`~/Downloads`. If the repo lives in one of those, Apache fails at startup with:
+`make` picks the binary and its module paths automatically:
+
+| Found | Uses | Modules from |
+|---|---|---|
+| `/opt/homebrew/opt/httpd` | Homebrew Apache | `$(brew --prefix httpd)/lib/httpd/modules` |
+| Apple's built-in | `/usr/sbin/httpd` | `/usr/libexec/apache2` |
+| Neither | `/usr/sbin/apache2` | `/usr/lib/apache2/modules` |
+
+`httpd.conf` takes these from the environment rather than hardcoding them, so
+the same config runs on all three. Override with `APACHE_SERVER_ROOT`,
+`APACHE_MODULE_DIR`, `APACHE_MIME_TYPES`, or point at a specific binary with
+`make serve HTTPD=/path/to/httpd`.
+
+Without `make`:
+
+```bash
+SAFESQUID_ROOT="$PWD" \
+APACHE_SERVER_ROOT=/opt/homebrew/opt/httpd \
+APACHE_MODULE_DIR=/opt/homebrew/opt/httpd/lib/httpd/modules \
+APACHE_MIME_TYPES=/opt/homebrew/etc/httpd/mime.types \
+/opt/homebrew/opt/httpd/bin/httpd -f "$PWD/httpd.conf" -DFOREGROUND
+```
+
+### macOS: Apple's Apache cannot read ~/Documents
+
+macOS TCC blocks `/usr/sbin/httpd` from `~/Documents`, `~/Desktop` and
+`~/Downloads`. With the repo in one of those and Apple's binary in use, startup
+fails with:
 
 ```
 httpd: Could not open configuration file .../httpd.conf: Operation not permitted
 ```
 
-The config is fine — this is a permission boundary, not a syntax error. Three
-fixes, in order of preference:
+That is a permission boundary, not a syntax error — the config is fine.
 
-1. **Move the repo** somewhere outside those folders (`~/src`, `~/projects`).
-   Nothing in the config is path-dependent; it reads `$SAFESQUID_ROOT`.
-2. **Grant Full Disk Access** to `/usr/sbin/httpd` in System Settings →
-   Privacy & Security → Full Disk Access.
-3. **Install Apache via Homebrew** (`brew install httpd`) and run that binary
-   instead; it is not covered by the Apple-signed binary's TCC identity.
+**`brew install httpd` fixes it**, and `make` then picks the Homebrew binary
+automatically, so the project runs wherever it is checked out. Note that
+`httpd` on `PATH` still resolves to Apple's copy even after installing, which
+is why the Makefile uses an absolute path rather than trusting `PATH`.
+
+Alternatives if you would rather not install it: move the repo outside those
+folders, or grant Full Disk Access to `/usr/sbin/httpd` in System Settings →
+Privacy & Security.
 
 Linux is unaffected.
 
