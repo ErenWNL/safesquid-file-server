@@ -110,6 +110,22 @@ AbortController identity race, and a deny rule blocking published artifacts.
 ## /qa + fixes
 Timestamp: 2026-08-01 15:02:23 (phase end, per TIMELOG.md)
 
+```
+  Session
+
+  Total cost:            $45.77
+  Total duration (API):  1h 5m 21s
+  Total duration (wall): 1h 56m 49s
+  Total code changes:    5061 lines added, 72 lines removed
+  Usage by model:
+      claude-haiku-4-5:  3.1k input, 19 output, 0 cache read, 0 cache write ($0.0032)
+         claude-opus-5:  3.5k input, 274.7k output, 68.0m cache read, 489.1k cache write ($45.77)
+```
+
+Delta for this phase: **$5.96** ($45.77 cumulative - $39.81 at the previous
+checkpoint). Cheapest phase since planning, and it still found five defects
+including a third instance of the too-broad-rewrite pattern.
+
 ## Deploy + docs
 Timestamp:
 
