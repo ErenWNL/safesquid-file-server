@@ -1,0 +1,47 @@
+<!--
+  Assertion page for the client-side pure functions.
+
+  There is no test runner in this project: npm and any build step are ruled out
+  by requirement, so Jest and Vitest are not available. These assertions run by
+  opening a URL. Nothing is mocked and nothing is bundled — the page imports
+  exactly the modules the site imports.
+
+  Open http://localhost:8081/tests/ or run `make test`.
+
+  This page ships with the site deliberately. It reaches nothing the site does
+  not already serve, and being able to open it and watch the assertions pass is
+  the point. It carries noindex so it stays out of search results.
+
+  No inline script here either: the CSP applies to this page too, so the
+  assertions live in tests.js.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tests — SafeSquid downloads</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/tests/tests.css">
+<script type="module" src="/tests/tests.js"></script>
+
+<div class="page">
+  <header class="masthead">
+    <div class="masthead-title">
+      <h1>Client tests</h1>
+      <p class="masthead-sub">
+        Pure functions from <code>format.js</code> and <code>manifest.js</code>,
+        plus DOM-level checks on the components. No dependencies, no build step.
+      </p>
+    </div>
+    <div id="tally" class="tally">running…</div>
+  </header>
+
+  <main id="results" class="main"></main>
+
+  <footer class="footer">
+    <p>
+      The Apache layer is covered separately by
+      <code>scripts/verify-security.sh</code>, and the manifest generator by
+      <code>scripts/test-generate-manifest.sh</code>.
+    </p>
+  </footer>
+</div>
