@@ -1,0 +1,12 @@
+# One of the honest reasons to replace mod_autoindex is that its output hands a
+# crawler the entire artifact tree. Making that argument in the README while
+# leaving the replacement crawlable would be hollow, so it is closed here and
+# again with X-Robots-Tag: noindex on the /files/ alias (see httpd.conf).
+#
+# The artifacts stay downloadable by anyone with a link. This is about not
+# publishing the shape of the tree to search engines, not about access control.
+
+User-agent: *
+Disallow: /files/
+Disallow: /tests/
+Disallow: /manifest.json
