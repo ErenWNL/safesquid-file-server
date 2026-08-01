@@ -1,0 +1,20 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not found — SafeSquid downloads</title>
+<link rel="stylesheet" href="/css/style.css">
+
+<!--
+  One page for both 403 and 404 (see ErrorDocument in httpd.conf), so probing
+  for which paths exist reveals nothing from the response body. The status code
+  still differs; the body never does.
+
+  No inline styles here. The Content-Security-Policy sets style-src 'self',
+  which blocks a <style> block on this page exactly as it blocks one inside a
+  shadow root.
+-->
+
+<main class="page page--message">
+  <h1>Not found</h1>
+  <p>That path does not exist on this server, or is not something you may read.</p>
+  <p><a href="/">Back to the index</a></p>
+</main>
