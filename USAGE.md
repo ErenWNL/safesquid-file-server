@@ -69,6 +69,24 @@ application code written.
 ## Implementation
 Timestamp: 2026-08-01 14:34:23 (phase end, per TIMELOG.md)
 
+```
+  Total cost:            $29.20
+  Total duration (API):  51m 5s
+  Total duration (wall): 1h 28m 45s
+  Total code changes:    4950 lines added, 61 lines removed
+  Usage by model:
+      claude-haiku-4-5:  3.1k input, 19 output, 0 cache read, 0 cache write ($0.0032)
+         claude-opus-5:  2.8k input, 219.4k output, 40.0m cache read, 370.7k cache write ($29.19)
+```
+
+Delta for this phase: **$20.90** ($29.20 cumulative - $8.30 at the previous
+checkpoint). This is by far the most expensive phase, and the reason is the
+verify-as-you-go loop rather than the writing: every change was re-served to a
+live Apache and re-probed through headless Chrome, which is what surfaced the
+four bugs listed in TIMELOG.md.
+
+Cumulative split: planning $8.30 (28%), implementation $20.90 (72%).
+
 ## /review + fixes
 Timestamp:
 
