@@ -108,7 +108,7 @@ without someone looking: a NUL byte in source, an O(n*m) hot path, an
 AbortController identity race, and a deny rule blocking published artifacts.
 
 ## /qa + fixes
-Timestamp:
+Timestamp: 2026-08-01 15:02:23 (phase end, per TIMELOG.md)
 
 ## Deploy + docs
 Timestamp:
