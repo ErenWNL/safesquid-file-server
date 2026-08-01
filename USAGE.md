@@ -133,3 +133,42 @@ Folded into implementation and QA — see TIMELOG.md. No separate cost reading t
 
 ## /ship
 Timestamp: 2026-08-01 15:07:33 (phase end, per TIMELOG.md)
+
+```
+  Total cost:            $50.18
+  Total duration (API):  1h 8m 57s
+  Total duration (wall): 2h 1m 54s
+  Total code changes:    5187 lines added, 72 lines removed
+  Usage by model:
+      claude-haiku-4-5:  3.1k input, 19 output, 0 cache read, 0 cache write ($0.0032)
+         claude-opus-5:  3.5k input, 288.1k output, 75.7m cache read, 511.7k cache write ($50.18)
+```
+
+Delta for this phase: **$4.41** ($50.18 cumulative - $45.77 at the previous
+checkpoint).
+
+## Totals
+
+| Phase | Delta | Cumulative |
+|---|---|---|
+| Repo/env setup | not captured | - |
+| /office-hours + planning | $2.51 | $2.51 |
+| /plan-ceo-review | $3.41 | $5.92 |
+| /plan-eng-review | $2.38 | $8.30 |
+| Implementation | $20.90 | $29.20 |
+| /review + fixes | $10.61 | $39.81 |
+| /qa + fixes | $5.96 | $45.77 |
+| Deploy + docs | folded into the phases above | - |
+| /ship | $4.41 | **$50.18** |
+
+Planning (three phases before any code): **$8.30, 17%**.
+Building and verifying: **$41.88, 83%**.
+
+The single most expensive phase was implementation at $20.90, and the reason
+was the verify-as-you-go loop rather than the writing — every change was
+re-served to a live Apache and re-probed through headless Chrome. That loop is
+what caught the four bugs listed against Implementation in TIMELOG.md, two of
+which `httpd -t` reported as Syntax OK.
+
+Reported by the session at the final checkpoint: 93% of usage was at >150k
+context, which is the cost driver on a single long session like this one.
