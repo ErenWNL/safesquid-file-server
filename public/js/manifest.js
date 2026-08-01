@@ -213,6 +213,60 @@ export function sizeOf(entry) {
   return Number(entry.size) || 0;
 }
 
+// Compound extensions have to be recognised as a unit, otherwise the last dot
+// splits "vpn.tar.gz" into base "vpn.tar" and the family match fails.
+const COMPOUND_EXTENSIONS = ['.tar.gz', '.tar.xz', '.tar.bz2', '.tar.zst'];
+
+/**
+ * Split a filename into base and extension, compound extensions included.
+ * @param {string} name
+ * @returns {{base: string, ext: string}}
+ */
+export function splitName(name) {
+  const lower = String(name).toLowerCase();
+  for (const ext of COMPOUND_EXTENSIONS) {
+    if (lower.endsWith(ext)) {
+      return { base: String(name).slice(0, -ext.length), ext: String(name).slice(-ext.length) };
+    }
+  }
+  const dot = String(name).lastIndexOf('.');
+  if (dot <= 0) return { base: String(name), ext: '' };
+  return { base: String(name).slice(0, dot), ext: String(name).slice(dot) };
+}
+
+/**
+ * Is this the unsuffixed "latest" alias of a timestamped artifact family?
+ *
+ * The nomenclature is {component}-{os-version}-{variant}-{unix-timestamp}.{ext}
+ * with an unsuffixed alias alongside — aggregator.iso beside
+ * aggregator-22.04-mini-1718548800.iso.
+ *
+ * "Has no timestamp in its name" is NOT sufficient on its own: by that test
+ * CHANGELOG.md and README.txt are aliases too. An alias is only meaningful
+ * relative to a family, so this requires an actual timestamped sibling sharing
+ * the same base and extension.
+ *
+ * @param {object} entry
+ * @param {Array<object>} siblings  entries in the same directory
+ * @returns {boolean}
+ */
+export function isLatestAlias(entry, siblings) {
+  if (!entry || entry.type !== 'file' || !Array.isArray(siblings)) return false;
+
+  const { base, ext } = splitName(entry.name);
+  if (!ext) return false;
+  if (/-\d{9,}$/.test(base)) return false;      // this one is itself timestamped
+
+  const prefix = `${base}-`;
+  return siblings.some((s) => (
+    s !== entry
+    && s.type === 'file'
+    && s.name.startsWith(prefix)
+    && splitName(s.name).ext === ext
+    && /-\d{9,}$/.test(splitName(s.name).base)
+  ));
+}
+
 /**
  * Build the download URL for a file node.
  *

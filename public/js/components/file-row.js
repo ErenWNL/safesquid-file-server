@@ -65,7 +65,7 @@ template.innerHTML = `
   </a>`;
 
 export class FileRow extends HTMLElement {
-  static get observedAttributes() { return ['show-path']; }
+  static get observedAttributes() { return ['show-path', 'latest']; }
 
   #entry = null;
   #root = null;
@@ -152,11 +152,11 @@ export class FileRow extends HTMLElement {
       pathEl.textContent = parent ? `in ${parent}` : 'in downloads';
     }
 
-    // An unsuffixed name alongside timestamped siblings is the "latest" alias
-    // described in the nomenclature doc. Flagging it makes the convention
-    // legible instead of something a reader has to reverse-engineer.
+    // The "latest" alias flag. Whether an entry qualifies depends on its
+    // siblings (see isLatestAlias in manifest.js), which a single row cannot
+    // see — so <directory-listing> decides and sets the attribute.
     const badge = root.querySelector('.badge');
-    badge.hidden = !(entry.type === 'file' && !/-\d{9,}\./.test(entry.name));
+    badge.hidden = !this.hasAttribute('latest');
 
     const sizeCell = root.querySelector('.cell--size');
     sizeCell.textContent = isDir

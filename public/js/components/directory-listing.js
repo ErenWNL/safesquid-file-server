@@ -16,6 +16,7 @@
  */
 
 import { formatCount, formatSize } from '../format.js';
+import { isLatestAlias } from '../manifest.js';
 
 const COLUMNS = [
   { key: 'name', label: 'Name' },
@@ -220,6 +221,9 @@ export class DirectoryListing extends HTMLElement {
     for (const entry of visible) {
       const row = document.createElement('file-row');
       if (this.#searchMode) row.setAttribute('show-path', '');
+      // Whether an entry is a "latest" alias depends on its siblings, which a
+      // row cannot see on its own. Decided here, where the full set is known.
+      if (isLatestAlias(entry, this.#entries)) row.setAttribute('latest', '');
       row.entry = entry;
       fragment.appendChild(row);
     }
@@ -246,9 +250,13 @@ export class DirectoryListing extends HTMLElement {
         summary.className = 'summary';
         const dirs = this.#entries.filter((e) => e.type === 'dir').length;
         const files = total - dirs;
-        summary.textContent = dirs
-          ? `${dirs} ${dirs === 1 ? 'folder' : 'folders'}, ${formatCount(files)}`
-          : formatCount(files);
+        const parts = [];
+        // Each part is included only when it is non-zero. Naively joining both
+        // produces "8 folders, empty" for a folder that holds only
+        // subdirectories, which reads as a contradiction.
+        if (dirs) parts.push(`${dirs} ${dirs === 1 ? 'folder' : 'folders'}`);
+        if (files) parts.push(formatCount(files));
+        summary.textContent = parts.join(', ');
         notice.appendChild(summary);
         notice.hidden = false;
       }
