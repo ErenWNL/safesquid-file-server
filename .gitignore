@@ -1,0 +1,10 @@
+# Apache runtime output — regenerated on every run, never committed.
+logs/
+
+# Generated index. Rebuilt by scripts/generate-manifest.sh via `make manifest`.
+# Committed deliberately (see README) so the site works on a fresh clone before
+# anyone runs the generator; this entry documents that it is generated, not
+# hand-maintained.
+#public/manifest.json
+
+.DS_Store

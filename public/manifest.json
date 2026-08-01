@@ -1,0 +1,351 @@
+{
+  "generatedAt": "2026-08-01T09:46:30Z",
+  "generatedAtEpoch": 1785577590,
+  "root": {
+    "entries": [
+      {
+        "entries": [
+          {
+            "mtime": 1655391291,
+            "name": "aggregator-18.04-full-1655391291.iso",
+            "path": "aggregator/aggregator-18.04-full-1655391291.iso",
+            "size": 1980000,
+            "type": "file"
+          },
+          {
+            "mtime": 1655391291,
+            "name": "aggregator-18.04-mini-1655391291.iso",
+            "path": "aggregator/aggregator-18.04-mini-1655391291.iso",
+            "size": 740000,
+            "type": "file"
+          },
+          {
+            "mtime": 1687012800,
+            "name": "aggregator-20.04-mini-1687012800.iso",
+            "path": "aggregator/aggregator-20.04-mini-1687012800.iso",
+            "size": 812000,
+            "type": "file"
+          },
+          {
+            "mtime": 1718548800,
+            "name": "aggregator-22.04-mini-1718548800.iso",
+            "path": "aggregator/aggregator-22.04-mini-1718548800.iso",
+            "size": 865000,
+            "type": "file"
+          },
+          {
+            "mtime": 1718548800,
+            "name": "aggregator.iso",
+            "path": "aggregator/aggregator.iso",
+            "size": 865000,
+            "type": "file"
+          },
+          {
+            "mtime": 1718548800,
+            "name": "CHANGELOG.md",
+            "path": "aggregator/CHANGELOG.md",
+            "size": 230,
+            "type": "file"
+          }
+        ],
+        "fileCount": 6,
+        "mtime": 1718548800,
+        "name": "aggregator",
+        "path": "aggregator",
+        "totalSize": 5262230,
+        "type": "dir"
+      },
+      {
+        "entries": [
+          {
+            "mtime": 1660000000,
+            "name": "appliance-20.04-standard-1660000000.ova",
+            "path": "appliance/appliance-20.04-standard-1660000000.ova",
+            "size": 1240000,
+            "type": "file"
+          },
+          {
+            "mtime": 1700000000,
+            "name": "appliance-22.04-hardened-1700000000.ova",
+            "path": "appliance/appliance-22.04-hardened-1700000000.ova",
+            "size": 1410000,
+            "type": "file"
+          },
+          {
+            "mtime": 1700000000,
+            "name": "appliance-22.04-standard-1700000000.ova",
+            "path": "appliance/appliance-22.04-standard-1700000000.ova",
+            "size": 1380000,
+            "type": "file"
+          },
+          {
+            "mtime": 1700000000,
+            "name": "appliance.ova",
+            "path": "appliance/appliance.ova",
+            "size": 1380000,
+            "type": "file"
+          },
+          {
+            "mtime": 1700000000,
+            "name": "README.txt",
+            "path": "appliance/README.txt",
+            "size": 257,
+            "type": "file"
+          }
+        ],
+        "fileCount": 5,
+        "mtime": 1700000000,
+        "name": "appliance",
+        "path": "appliance",
+        "totalSize": 5410257,
+        "type": "dir"
+      },
+      {
+        "entries": [
+          {
+            "mtime": 1710000000,
+            "name": "clamav-signatures-1710000000.tar.gz",
+            "path": "contrib/clamav-signatures-1710000000.tar.gz",
+            "size": 623000,
+            "type": "file"
+          },
+          {
+            "mtime": 1720000000,
+            "name": "contrib-tools-1720000000.tar.gz",
+            "path": "contrib/contrib-tools-1720000000.tar.gz",
+            "size": 88000,
+            "type": "file"
+          },
+          {
+            "mtime": 1690000000,
+            "name": "squidguard-blacklist-1690000000.tar.gz",
+            "path": "contrib/squidguard-blacklist-1690000000.tar.gz",
+            "size": 445000,
+            "type": "file"
+          }
+        ],
+        "fileCount": 3,
+        "mtime": 1720000000,
+        "name": "contrib",
+        "path": "contrib",
+        "totalSize": 1156000,
+        "type": "dir"
+      },
+      {
+        "entries": [
+          {
+            "mtime": 1480000000,
+            "name": "DEPRECATED.txt",
+            "path": "legacy/DEPRECATED.txt",
+            "size": 166,
+            "type": "file"
+          },
+          {
+            "mtime": 1400000000,
+            "name": "safesquid-14.04-legacy-1400000000.tar.gz",
+            "path": "legacy/safesquid-14.04-legacy-1400000000.tar.gz",
+            "size": 210000,
+            "type": "file"
+          },
+          {
+            "mtime": 1480000000,
+            "name": "safesquid-16.04-legacy-1480000000.tar.gz",
+            "path": "legacy/safesquid-16.04-legacy-1480000000.tar.gz",
+            "size": 256000,
+            "type": "file"
+          }
+        ],
+        "fileCount": 3,
+        "mtime": 1480000000,
+        "name": "legacy",
+        "path": "legacy",
+        "totalSize": 466166,
+        "type": "dir"
+      },
+      {
+        "entries": [
+          {
+            "entries": [
+              {
+                "entries": [
+                  {
+                    "mtime": 1735689600,
+                    "name": "Packages.gz",
+                    "path": "repo/dists/stable/Packages.gz",
+                    "size": 31000,
+                    "type": "file"
+                  },
+                  {
+                    "mtime": 1735689600,
+                    "name": "Release",
+                    "path": "repo/dists/stable/Release",
+                    "size": 146,
+                    "type": "file"
+                  }
+                ],
+                "fileCount": 2,
+                "mtime": 1735689600,
+                "name": "stable",
+                "path": "repo/dists/stable",
+                "totalSize": 31146,
+                "type": "dir"
+              }
+            ],
+            "fileCount": 2,
+            "mtime": 1735689600,
+            "name": "dists",
+            "path": "repo/dists",
+            "totalSize": 31146,
+            "type": "dir"
+          },
+          {
+            "entries": [
+              {
+                "mtime": 1712000000,
+                "name": "safesquid_2024.1_amd64.deb",
+                "path": "repo/pool/safesquid_2024.1_amd64.deb",
+                "size": 540000,
+                "type": "file"
+              },
+              {
+                "mtime": 1745000000,
+                "name": "safesquid_2025.2_amd64.deb",
+                "path": "repo/pool/safesquid_2025.2_amd64.deb",
+                "size": 578000,
+                "type": "file"
+              }
+            ],
+            "fileCount": 2,
+            "mtime": 1745000000,
+            "name": "pool",
+            "path": "repo/pool",
+            "totalSize": 1118000,
+            "type": "dir"
+          },
+          {
+            "mtime": 1650000000,
+            "name": "repo-key-1650000000.gpg",
+            "path": "repo/repo-key-1650000000.gpg",
+            "size": 3100,
+            "type": "file"
+          }
+        ],
+        "fileCount": 5,
+        "mtime": 1745000000,
+        "name": "repo",
+        "path": "repo",
+        "totalSize": 1152246,
+        "type": "dir"
+      },
+      {
+        "entries": [
+          {
+            "entries": [],
+            "fileCount": 0,
+            "mtime": 1736726400,
+            "name": "pending",
+            "path": "staging/pending",
+            "totalSize": 0,
+            "type": "dir"
+          },
+          {
+            "mtime": 1735689600,
+            "name": "staging-23.04-beta-1735689600.iso",
+            "path": "staging/staging-23.04-beta-1735689600.iso",
+            "size": 905000,
+            "type": "file"
+          }
+        ],
+        "fileCount": 1,
+        "mtime": 1736726400,
+        "name": "staging",
+        "path": "staging",
+        "totalSize": 905000,
+        "type": "dir"
+      },
+      {
+        "entries": [
+          {
+            "mtime": 1705000000,
+            "name": "swg-22.04-full-1705000000.iso",
+            "path": "SWG/swg-22.04-full-1705000000.iso",
+            "size": 2150000,
+            "type": "file"
+          },
+          {
+            "mtime": 1705000000,
+            "name": "swg-22.04-mini-1705000000.iso",
+            "path": "SWG/swg-22.04-mini-1705000000.iso",
+            "size": 690000,
+            "type": "file"
+          },
+          {
+            "mtime": 1740000000,
+            "name": "swg-24.04-full-1740000000.iso",
+            "path": "SWG/swg-24.04-full-1740000000.iso",
+            "size": 2310000,
+            "type": "file"
+          },
+          {
+            "mtime": 1740000000,
+            "name": "swg.iso",
+            "path": "SWG/swg.iso",
+            "size": 2310000,
+            "type": "file"
+          }
+        ],
+        "fileCount": 4,
+        "mtime": 1740000000,
+        "name": "SWG",
+        "path": "SWG",
+        "totalSize": 7460000,
+        "type": "dir"
+      },
+      {
+        "entries": [
+          {
+            "mtime": 1715000000,
+            "name": "vpn-client-linux-1715000000.tar.gz",
+            "path": "VPN/vpn-client-linux-1715000000.tar.gz",
+            "size": 186000,
+            "type": "file"
+          },
+          {
+            "mtime": 1715000000,
+            "name": "vpn-client-macos-1715000000.dmg",
+            "path": "VPN/vpn-client-macos-1715000000.dmg",
+            "size": 512000,
+            "type": "file"
+          },
+          {
+            "mtime": 1715000000,
+            "name": "vpn-client-windows-1715000000.exe",
+            "path": "VPN/vpn-client-windows-1715000000.exe",
+            "size": 430000,
+            "type": "file"
+          },
+          {
+            "mtime": 1715000000,
+            "name": "vpn.tar.gz",
+            "path": "VPN/vpn.tar.gz",
+            "size": 186000,
+            "type": "file"
+          }
+        ],
+        "fileCount": 4,
+        "mtime": 1715000000,
+        "name": "VPN",
+        "path": "VPN",
+        "totalSize": 1314000,
+        "type": "dir"
+      }
+    ],
+    "fileCount": 31,
+    "mtime": 1785571981,
+    "name": "",
+    "path": "",
+    "totalSize": 23125899,
+    "type": "dir"
+  },
+  "schemaVersion": 1
+}

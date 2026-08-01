@@ -1,0 +1,274 @@
+/*
+ * style.css — page-level styling and the theme.
+ *
+ * THIS FILE OWNS THE THEME FOR THE WHOLE APP, SHADOW ROOTS INCLUDED.
+ *
+ * Custom properties inherit through shadow boundaries. Ordinary selectors do
+ * not — a rule for `.row` here cannot reach inside <file-row>. So the tokens
+ * below are declared on :root and the components' own stylesheet consumes them
+ * with var(). One place to change a colour, three components follow.
+ *
+ * The grid track sizes are a token for the same reason: the header row lives
+ * in <directory-listing>'s shadow root and the data rows live in <file-row>'s,
+ * two separate trees that cannot share a grid. Both apply the identical
+ * template from --grid-cols, which is what keeps the columns lined up.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Layout ---------------------------------------------------------------- */
+  --measure: 76rem;
+  --radius: 6px;
+  --grid-cols: minmax(0, 1fr) 11rem 13rem;
+  --row-pad: 0.5rem 0.875rem;
+
+  /* Type ------------------------------------------------------------------ */
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Light palette --------------------------------------------------------- */
+  --bg: #fbfbfa;
+  --bg-raised: #ffffff;
+  --bg-sunken: #f2f2f0;
+  --bg-hover: #f0f4f3;
+  --fg: #16191d;
+  --fg-muted: #5d646e;
+  --fg-faint: #8b929c;
+  --rule: #e3e4e2;
+  --rule-strong: #cfd1ce;
+  --accent: #0f7360;
+  --accent-fg: #ffffff;
+  --accent-soft: #e3f2ee;
+  --warn: #8a5a00;
+  --focus: #0f7360;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Not an inversion. A flat inversion of a light palette produces muddy
+       greys and an accent that fails contrast on the new background, so the
+       dark values are picked against the dark surface directly. */
+    --bg: #101214;
+    --bg-raised: #171a1d;
+    --bg-sunken: #0b0d0e;
+    --bg-hover: #1c2124;
+    --fg: #e8eaec;
+    --fg-muted: #9aa2ab;
+    --fg-faint: #6b737c;
+    --rule: #262b2f;
+    --rule-strong: #363d42;
+    --accent: #4fd1b0;
+    --accent-fg: #0b0d0e;
+    --accent-soft: #16302b;
+    --warn: #e0b155;
+    --focus: #4fd1b0;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-sunken);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+/* A visible focus ring everywhere. Removing outlines without replacing them is
+   the single most common way a page becomes unusable by keyboard. */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 0.6rem 1rem;
+  z-index: 10;
+  text-decoration: none;
+}
+.skip-link:focus { left: 0; }
+
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+/* Masthead ---------------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 2.25rem 0 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.masthead h1 a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.masthead-accent {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.masthead-sub {
+  margin: 0.25rem 0 0;
+  color: var(--fg-muted);
+  font-size: 0.875rem;
+}
+
+/* Search ------------------------------------------------------------------ */
+
+.search { min-width: min(22rem, 100%); }
+
+.search-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-faint);
+  margin-bottom: 0.3rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--fg);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+}
+
+.search-input::placeholder { color: var(--fg-faint); }
+
+.search-input:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.search-hint {
+  margin: 0.3rem 0 0;
+  font-size: 0.75rem;
+  color: var(--fg-faint);
+}
+
+/* Main -------------------------------------------------------------------- */
+
+.main { margin-top: 1rem; }
+
+/* Page-level states: not found, and index unavailable. Distinct from the
+   empty-folder state, which the listing renders itself. */
+.page-state {
+  margin: 3rem auto;
+  max-width: 34rem;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.page-state-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.page-state-body {
+  margin: 0 0 1.25rem;
+  color: var(--fg-muted);
+  font-size: 0.9rem;
+}
+
+.button {
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.45rem 1rem;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.button:hover { filter: brightness(1.08); }
+
+/* Footer ------------------------------------------------------------------ */
+
+.footer {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--fg-faint);
+  font-size: 0.8rem;
+}
+
+.footer p { margin: 0.25rem 0; }
+
+.footer-freshness time {
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+}
+
+.noscript {
+  max-width: var(--measure);
+  margin: 1rem auto;
+  padding: 1rem 1.25rem;
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+}
+
+/* Responsive -------------------------------------------------------------- */
+
+@media (max-width: 46rem) {
+  :root {
+    /* Below this width the size and date columns stop earning their space, so
+       the row reflows to two lines — see components.css. */
+    --grid-cols: minmax(0, 1fr);
+    --row-pad: 0.55rem 0.75rem;
+  }
+
+  .masthead {
+    align-items: stretch;
+    padding-top: 1.5rem;
+  }
+
+  .search { min-width: 100%; }
+}

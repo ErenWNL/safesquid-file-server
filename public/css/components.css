@@ -1,0 +1,276 @@
+/*
+ * components.css — styles for the three Web Components' shadow roots.
+ *
+ * WHY THIS FILE EXISTS AT ALL
+ *
+ * The usual way to style a Web Component is a <style> block inside its shadow
+ * root. The Content-Security-Policy here sets style-src 'self' with no
+ * 'unsafe-inline', and CSP treats a <style> element as an inline style
+ * wherever it appears — shadow DOM gets no exemption. So the tutorial pattern
+ * renders every component unstyled the moment the policy is on.
+ *
+ * Each component instead links this file into its shadow root. That is an
+ * ordinary same-origin stylesheet fetch, which the policy allows, and the
+ * browser serves it from cache after the first row.
+ *
+ * Colours and grid tracks come from custom properties declared on :root in
+ * style.css. Custom properties inherit through the shadow boundary; ordinary
+ * selectors do not. That inheritance is the whole theming mechanism, and it is
+ * what makes the header row here line up with the data rows in a different
+ * shadow tree — both read --grid-cols.
+ */
+
+:host {
+  display: block;
+}
+
+/* ====================================================================== rows */
+
+.row {
+  display: grid;
+  grid-template-columns: var(--grid-cols);
+  align-items: center;
+  gap: 0.75rem;
+  padding: var(--row-pad);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+}
+
+.row--file:hover,
+.row--dir:hover {
+  background: var(--bg-hover);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.cell {
+  min-width: 0;                 /* lets long filenames actually truncate */
+  font-size: 0.875rem;
+}
+
+.cell--name {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row--dir .name {
+  font-family: var(--font-ui);
+  font-weight: 550;
+}
+
+/* Size and date are numeric columns, so they get tabular figures — without
+   this, digits have different widths and the column reads as ragged. */
+.cell--size,
+.cell--date {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cell--size { text-align: right; }
+
+/* The unsuffixed "latest" alias next to timestamped siblings. Flagging it
+   makes the naming convention legible rather than something to infer. */
+.badge {
+  flex: none;
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 3px;
+  padding: 0.1rem 0.35rem;
+}
+
+.badge[hidden] { display: none; }
+
+/* Shown only in search results, where a row appears out of its folder. */
+.path {
+  flex: none;
+  font-size: 0.75rem;
+  color: var(--fg-faint);
+  font-family: var(--font-mono);
+}
+
+.path[hidden] { display: none; }
+
+/* Icons ------------------------------------------------------------------- */
+
+.icon-slot {
+  display: flex;
+  flex: none;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+.row--dir .icon { color: var(--accent); }
+.row--file .icon { color: var(--fg-faint); }
+.icon-fold { fill: var(--bg); opacity: 0.55; }
+
+/* =================================================================== listing */
+
+.listing {
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.row--head {
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 0.2rem 0.875rem;
+}
+
+.thead[hidden] { display: none; }
+
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg-muted);
+  background: none;
+  border: 0;
+  padding: 0.4rem 0;
+  cursor: pointer;
+}
+
+.sort-button:hover { color: var(--fg); }
+.sort-button.is-asc,
+.sort-button.is-desc { color: var(--accent); }
+
+.cell--size .sort-button { margin-left: auto; }
+
+.sort-arrow { font-size: 0.6rem; }
+
+/* States ------------------------------------------------------------------ */
+
+.state {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+  padding: 3rem 1.5rem;
+  color: var(--fg-muted);
+}
+
+.state[hidden] { display: none; }
+.state-message { font-size: 0.95rem; }
+.state-hint { font-size: 0.8125rem; color: var(--fg-faint); }
+
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.5rem 0.875rem;
+  background: var(--bg-sunken);
+  font-size: 0.8125rem;
+  color: var(--fg-muted);
+}
+
+.notice[hidden] { display: none; }
+
+.summary {
+  font-family: var(--font-mono);
+  color: var(--fg-faint);
+}
+
+.link-button {
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ================================================================ breadcrumb */
+
+.crumbs { padding: 0.9rem 0 0.6rem; }
+
+.crumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.crumb-link {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.crumb-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.crumb-current { color: var(--fg); font-weight: 600; }
+.crumb-sep { color: var(--fg-faint); }
+
+/* ================================================================ responsive */
+
+@media (max-width: 46rem) {
+  /* --grid-cols collapses to a single track in style.css, so the size and date
+     cells drop below the name instead of being crushed into unreadable
+     columns. The header row is hidden because there is nothing left to align
+     to; sorting stays reachable from the URL and returns on a wider screen. */
+  .row {
+    gap: 0.15rem;
+  }
+
+  .cell--size,
+  .cell--date {
+    text-align: left;
+    font-size: 0.75rem;
+  }
+
+  .row--head {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.2rem 0.75rem;
+  }
+
+  .cell--size .sort-button { margin-left: 0; }
+}
