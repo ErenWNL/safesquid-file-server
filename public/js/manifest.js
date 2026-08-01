@@ -156,6 +156,25 @@ export function filterEntries(entries, query) {
 }
 
 /**
+ * The sortable columns, in display order.
+ *
+ * Single source of truth. app.js validates ?sort= against this and
+ * <directory-listing> renders one header per entry; when the two kept separate
+ * lists, adding a column meant editing both and forgetting one made the header
+ * clickable but the URL parameter silently ignored.
+ *
+ * @type {ReadonlyArray<{key: string, label: string}>}
+ */
+export const SORT_COLUMNS = Object.freeze([
+  { key: 'name', label: 'Name' },
+  { key: 'size', label: 'Size' },
+  { key: 'date', label: 'Last modified' },
+]);
+
+/** @type {ReadonlySet<string>} */
+export const SORT_KEYS = new Set(SORT_COLUMNS.map((c) => c.key));
+
+/**
  * Sort comparator factory.
  *
  * Folders always sort above files regardless of column or direction. That is
@@ -252,19 +271,64 @@ export function splitName(name) {
  */
 export function isLatestAlias(entry, siblings) {
   if (!entry || entry.type !== 'file' || !Array.isArray(siblings)) return false;
+  return latestAliasSet(siblings).has(entry.name);
+}
 
-  const { base, ext } = splitName(entry.name);
-  if (!ext) return false;
-  if (/-\d{9,}$/.test(base)) return false;      // this one is itself timestamped
+/**
+ * Every name in `entries` that is a latest alias, computed in one pass.
+ *
+ * The per-entry form above rescans the whole sibling list for each entry it is
+ * asked about, which is O(n*m): rendering 500 rows of a 12,000-entry folder ran
+ * six million string splits. This builds the family index once instead.
+ *
+ * The result is cached against the array identity, so a component calling
+ * isLatestAlias in a render loop pays for the scan once per listing rather than
+ * once per row.
+ *
+ * @param {Array<object>} entries
+ * @returns {Set<string>}
+ */
+const aliasCache = new WeakMap();
 
-  const prefix = `${base}-`;
-  return siblings.some((s) => (
-    s !== entry
-    && s.type === 'file'
-    && s.name.startsWith(prefix)
-    && splitName(s.name).ext === ext
-    && /-\d{9,}$/.test(splitName(s.name).base)
-  ));
+export function latestAliasSet(entries) {
+  if (!Array.isArray(entries)) return new Set();
+  const cached = aliasCache.get(entries);
+  if (cached) return cached;
+
+  // One pass to collect the families that actually have a timestamped member.
+  //
+  // A timestamped file registers every hyphen-prefix of its base, not only the
+  // whole base. aggregator-18.04-mini-1655391291.iso registers "aggregator",
+  // "aggregator-18.04" and "aggregator-18.04-mini", because the alias it
+  // belongs to is named aggregator.iso and matches only the first of those.
+  // Keying on the full base alone finds no family and misses every alias - the
+  // bug this rewrite introduced on its first attempt, caught by /tests/. Bases
+  // have a handful of segments, so this stays effectively linear.
+  const families = new Set();
+  for (const e of entries) {
+    if (e.type !== 'file') continue;
+    const { base, ext } = splitName(e.name);
+    if (!ext) continue;
+    const match = /^(.*)-\d{9,}$/.exec(base);
+    if (!match || !match[1]) continue;
+
+    const segments = match[1].split('-');
+    for (let i = 1; i <= segments.length; i++) {
+      families.add(`${segments.slice(0, i).join('-')} ${ext}`);
+    }
+  }
+
+  // Second pass: an unsuffixed file whose family exists is the alias.
+  const aliases = new Set();
+  for (const e of entries) {
+    if (e.type !== 'file') continue;
+    const { base, ext } = splitName(e.name);
+    if (!ext || /-\d{9,}$/.test(base)) continue;
+    if (families.has(`${base} ${ext}`)) aliases.add(e.name);
+  }
+
+  aliasCache.set(entries, aliases);
+  return aliases;
 }
 
 /**

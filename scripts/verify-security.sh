@@ -131,6 +131,21 @@ assert_status "a missing artifact 404s"                 "$BASE/files/SWG/nope.is
 assert_body_lacks "a missing artifact is not the app shell" \
   "$BASE/files/SWG/nope.iso" "<directory-listing"
 
+# Regression guard. The config-denial rules match extensions like .sh, .log and
+# .conf so that /httpd.conf fails closed. They sat in global scope originally,
+# which also denied published artifacts with those extensions — 403 on the
+# download while the manifest still listed it, so the UI offered a link that
+# always failed. These must stay scoped to the docroot.
+for EXT_PATH in "contrib/install-helper-1720000000.sh" "contrib/build-1720000000.log"; do
+  EXT_CODE="$(status "$BASE/files/$EXT_PATH")"
+  case "$EXT_CODE" in
+    200) ok "an artifact named *.${EXT_PATH##*.} downloads (not caught by the config denial)" ;;
+    404) ok "no *.${EXT_PATH##*.} fixture present — skipped" ;;
+    *)   bad "an artifact named *.${EXT_PATH##*.} downloads" "200 or 404" "$EXT_CODE" ;;
+  esac
+done
+
+
 # ============================================================================
 section "3. Path traversal"
 # ============================================================================

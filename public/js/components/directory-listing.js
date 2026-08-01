@@ -16,13 +16,7 @@
  */
 
 import { formatCount, formatSize } from '../format.js';
-import { isLatestAlias } from '../manifest.js';
-
-const COLUMNS = [
-  { key: 'name', label: 'Name' },
-  { key: 'size', label: 'Size' },
-  { key: 'date', label: 'Last modified' },
-];
+import { isLatestAlias, SORT_COLUMNS } from '../manifest.js';
 
 // Rendering one DOM node per file is fine for the folder sizes this serves,
 // and catastrophic for a folder with fifty thousand entries: the page freezes.
@@ -131,7 +125,7 @@ export class DirectoryListing extends HTMLElement {
     const head = this.#root.querySelector('.row--head');
     head.replaceChildren();
 
-    for (const col of COLUMNS) {
+    for (const col of SORT_COLUMNS) {
       const cell = document.createElement('span');
       cell.className = `cell cell--${col.key === 'date' ? 'date' : col.key}`;
       cell.setAttribute('role', 'columnheader');

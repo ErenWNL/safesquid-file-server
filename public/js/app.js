@@ -38,11 +38,11 @@ import {
   flatten,
   filterEntries,
   comparator,
+  SORT_KEYS,
 } from './manifest.js';
 
 const MANIFEST_URL = '/manifest.json';
 const SEARCH_DEBOUNCE_MS = 150;
-const VALID_COLUMNS = new Set(['name', 'size', 'date']);
 
 const el = {
   breadcrumb: document.getElementById('breadcrumb'),
@@ -88,7 +88,7 @@ function readLocation() {
   state.sort = {
     // Anything not in the allow-list falls back to the default rather than
     // being trusted. A hand-edited ?sort=__proto__ selects nothing.
-    column: VALID_COLUMNS.has(column) ? column : 'name',
+    column: SORT_KEYS.has(column) ? column : 'name',
     direction: direction === 'desc' ? 'desc' : 'asc',
   };
 
@@ -228,14 +228,17 @@ function renderFreshness() {
 
 async function loadManifest() {
   if (inFlight) inFlight.abort();
-  inFlight = new AbortController();
+  // Held in a local as well, so the finally block can tell whether the
+  // controller it is about to clear is still the current one.
+  const controller = new AbortController();
+  inFlight = controller;
 
   state.status = 'loading';
   render();
 
   try {
     const response = await fetch(MANIFEST_URL, {
-      signal: inFlight.signal,
+      signal: controller.signal,
       // The manifest is already Cache-Control: no-cache from Apache; asking
       // again here means a hard reload genuinely re-reads it.
       cache: 'no-cache',
@@ -267,7 +270,11 @@ async function loadManifest() {
       : error.message;
     render();
   } finally {
-    inFlight = null;
+    // Only clear if this call is still the current one. Without the guard, a
+    // superseded request's finally runs after the newer request has already
+    // stored its controller, wipes it, and the next navigation then has
+    // nothing to abort.
+    if (inFlight === controller) inFlight = null;
   }
 }
 
@@ -297,7 +304,7 @@ document.addEventListener('entry-activate', (event) => {
 
 el.listing.addEventListener('sort-change', (event) => {
   const { column } = event.detail;
-  if (!VALID_COLUMNS.has(column)) return;
+  if (!SORT_KEYS.has(column)) return;
 
   state.sort = state.sort.column === column
     // Same column toggles direction.
